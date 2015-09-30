@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Droidz by sethbergman</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Droidz</h1>
+        <h2>New Android App</h2>
+        <a href="https://github.com/sethbergman/droidz" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2>
+<a id="login-with-google-plus-utility" class="anchor" href="#login-with-google-plus-utility" aria-hidden="true"><span class="octicon octicon-link"></span></a>Login with Google Plus Utility</h2>
+
+<h3>
+<a id="pre-requisite" class="anchor" href="#pre-requisite" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pre-requisite</h3>
+
+<p>Official Document: <a href="https://developers.google.com/+/mobile/android/sign-in">https://developers.google.com/+/mobile/android/sign-in</a></p>
+
+<p>Tutorial from AndroidHive : <a href="http://www.androidhive.info/2014/02/android-login-with-google-plus-account-1/">http://www.androidhive.info/2014/02/android-login-with-google-plus-account-1/</a></p>
+
+<p>Note: Please read AndroidHive article for initial setup &amp; other process</p>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h3>
+
+<h4>
+<a id="step-1-import-googleplusloginutilsjava-class-in-your-package" class="anchor" href="#step-1-import-googleplusloginutilsjava-class-in-your-package" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 1: Import "GooglePlusLoginUtils.java" class in your package</h4>
+
+<h4>
+<a id="step-2-implement-callback-listener" class="anchor" href="#step-2-implement-callback-listener" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 2: Implement callback listener</h4>
+
+<pre><code>public class LoginActivity extends Activity implements GooglePlusLoginUtils.GPlusLoginStatus 
+</code></pre>
+
+<h4>
+<a id="step-3-declare-callback-method" class="anchor" href="#step-3-declare-callback-method" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 3: Declare callback method</h4>
+
+<pre><code>public void OnSuccessGPlusLogin(Bundle profile) {
+    Log.i(TAG,profile.getString(GooglePlusLoginUtils.NAME));       
+    Log.i(TAG,profile.getString(GooglePlusLoginUtils.EMAIL));
+    Log.i(TAG,profile.getString(GooglePlusLoginUtils.PHOTO));
+    Log.i(TAG,profile.getString(GooglePlusLoginUtils.PROFILE));
+}
+</code></pre>
+
+<h4>
+<a id="step-4-declare-object-of-googleplusloginutilsjava" class="anchor" href="#step-4-declare-object-of-googleplusloginutilsjava" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 4: Declare object of GooglePlusLoginUtils.java</h4>
+
+<pre><code>private GooglePlusLoginUtils gLogin;
+</code></pre>
+
+<h4>
+<a id="step-5-initialize-object-in-oncreate-method" class="anchor" href="#step-5-initialize-object-in-oncreate-method" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 5: Initialize object in onCreate method</h4>
+
+<pre><code> gLogin = new GooglePlusLoginUtils(this, R.id.activity_login_gplus); // Id of login button
+    gLogin.setLoginStatus(this);
+</code></pre>
+
+<h4>
+<a id="step-6-declare-few-supporting-methods" class="anchor" href="#step-6-declare-few-supporting-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 6: Declare few supporting methods</h4>
+
+<pre><code>@Override
+protected void onStart() {
+        super.onStart();
+        gLogin.connect();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        gLogin.disconnect();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode,
+                                    Intent intent) {
+        gLogin.onActivityResult(requestCode, responseCode, intent);
+
+    }
+</code></pre>
+
+<h3>
+<a id="faq" class="anchor" href="#faq" aria-hidden="true"><span class="octicon octicon-link"></span></a>FAQ</h3>
+
+<p>Q: What is the problem of above approach ?</p>
+
+<p>A: You activity has a lot of scattered code for Google Pluse login, It will be more complex and unmanageable when you will have another social network login like Facebook and Twitter.</p>
+
+<p>Q: How I will receive a response for login success?</p>
+
+<p>A: You need to implement interface "GPlusloginStatus", on successful login you will receive callback "OnSuccessGPlusLogin"</p>
+
+<p>Q: What will be received on login success ?</p>
+
+<p>A: You will have Display name, Email , Photo and Profile url.</p>
+
+<p>Q: Do I need to handle login failure / error ?</p>
+
+<p>A: No, GooglePlusLoginUtils.java will handle login failure, error and display appropriate message on screen.   </p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/sethbergman/droidz/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/sethbergman/droidz/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/sethbergman/droidz"></a> is maintained by <a href="https://github.com/sethbergman">sethbergman</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
